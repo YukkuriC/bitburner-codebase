@@ -1,6 +1,5 @@
-import { props } from 'BASE.js'
+import { props } from '/meta/META'
 
 export async function main(ns) {
-	console.log(props)
 	props.router.toDevMenu()
 }
