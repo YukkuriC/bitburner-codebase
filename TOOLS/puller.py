@@ -17,7 +17,7 @@ except:
     traceback.print_exc()
     exit()
 
-base_dir = os.path.abspath(os.path.join(__file__, '..'))
+base_dir = os.path.abspath(os.path.join(__file__, '../..'))
 # remove old
 for root, folders, files in os.walk(base_dir):
     for f in files:

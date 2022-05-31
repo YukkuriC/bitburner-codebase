@@ -9,4 +9,5 @@ export async function main(ns) {
     var json = JSON.stringify(data)
     var disp = await copy(json)
     await terminal.print(`Copied: ${disp} (${Object.keys(data).length} files, l=${json.length})`)
+    await terminal.print(`Run "TOOLS/puller.py" to sync OUTSIDE`)
 }

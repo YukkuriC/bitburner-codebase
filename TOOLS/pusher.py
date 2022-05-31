@@ -17,8 +17,8 @@ def dump_clipboard(data):
     return len(text)
 
 
-base_dir = os.path.abspath(os.path.join(__file__, '..'))
 data = {}
+base_dir = os.path.abspath(os.path.join(__file__, '../..'))
 for root, folders, files in os.walk(base_dir):
     for f in files:
         if not f.endswith('.js'):
@@ -30,3 +30,4 @@ for root, folders, files in os.walk(base_dir):
 
 tlen = dump_clipboard(data)
 print(f'Copied: {len(data)} files, l={tlen}!')
+print(f'Run "meta/s/load.js" to sync INSIDE')
