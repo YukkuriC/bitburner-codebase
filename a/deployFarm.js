@@ -1,4 +1,5 @@
-// deploy farming code to all rooted servers, attacking `args[0]`
+// deploy farming code to all rooted servers, attacking `args[0]`, or themselves if no arg passed.
+// if `args[1]` set, will kill existing script and override
 
 import { bfsBind } from 'BASE.js'
 const file = '/unit/farm.js'

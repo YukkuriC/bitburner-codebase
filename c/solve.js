@@ -1,3 +1,7 @@
+// `solve.js host filename [debug=0]`
+// solve a coding contract `args[1]` on server `args[0]`
+// if `args[2]` provided, then only display solution without submission.
+
 import { dePrime, cached } from '/c/helper'
 
 const stringfy = (o) => {

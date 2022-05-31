@@ -1,3 +1,6 @@
+// `farm.js target`
+// farm unit used by `deployFarm.js`
+
 const GROW_THRESHOLD = 0.9
 
 export async function main(ns) {

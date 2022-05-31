@@ -1,3 +1,6 @@
+// BFS search the shortest route from one server to another
+// can be called by `route.js target [source=home]`
+
 import { bfsBind } from 'BASE'
 
 export async function findRoute(ns, source, target) {

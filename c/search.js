@@ -1,3 +1,5 @@
+// search and display all coding contracts among servers
+
 import { bfsBind } from 'BASE.js'
 
 export async function main(ns) {

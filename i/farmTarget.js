@@ -1,3 +1,5 @@
+// search for best farming target using heuristic scoring
+
 import { bfsBind, canHack } from 'BASE.js'
 import { main as route_main } from 'i/route.js'
 

@@ -1,3 +1,5 @@
+// helper functions for coding contracts
+
 export function dePrime(num) {
 	var cnt = {}
 	for (var i = 2; i * i < num; i++) {
