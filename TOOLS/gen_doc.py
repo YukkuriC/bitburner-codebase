@@ -1,5 +1,6 @@
 import os, re
 from functools import lru_cache
+from io import StringIO
 
 base_dir = os.path.abspath(__file__ + '/../..')
 os.chdir(base_dir)
@@ -13,6 +14,7 @@ tag_colors = {
     'hack': 'green',
     'singularity': 'purple',
 }
+root_cut_line = '<!-- begin script info -->'
 
 if 'helpers':
 
@@ -109,34 +111,53 @@ for root, folders, files in os.walk(base_dir):
     if not jss:
         continue
 
-    with open(
-            os.path.join(root, 'README.md'),
-            'a' if os.path.relpath(root, base_dir) == '.' else 'w',
-            encoding='utf-8',
-    ) as f:
-        reldir = link_path(root)
-        print('# Folder:', display_path(reldir), file=f)
-        print(*headers, sep='|', file=f)
-        print('|'.join('-' * len(headers)), file=f)
-        for ff in jss:
-            relfile = os.path.join(reldir, ff).replace('\\', '/')
-            line = [''] * len(headers)
-            line[0] = md_link(relfile, root)
+    # dump markdown to string
+    f = StringIO()
+    reldir = link_path(root)
+    print('# Folder:', display_path(reldir), file=f)
+    print(*headers, sep='|', file=f)
+    print('|'.join('-' * len(headers)), file=f)
+    for ff in jss:
+        relfile = os.path.join(reldir, ff).replace('\\', '/')
+        line = [''] * len(headers)
+        line[0] = md_link(relfile, root)
 
-            # descrip
-            line[1] = descriptions(relfile) or 'TODO'
+        # descrip
+        line[1] = descriptions(relfile) or 'TODO'
 
-            # dependency
-            ddep, idep = dependency(relfile)
-            ddep = '<br>'.join((md_link(i, root) for i in ddep))
-            idep = '<br>'.join((md_link(i, root) for i in idep))
-            if idep:
-                idep = f'<details><summary>MORE</summary>{idep}</details>'
-                ddep += idep
-            line[2] = ddep or '-'
+        # dependency
+        ddep, idep = dependency(relfile)
+        ddep = '<br>'.join((md_link(i, root) for i in ddep))
+        idep = '<br>'.join((md_link(i, root) for i in idep))
+        if idep:
+            idep = f'<details><summary>MORE</summary>{idep}</details>'
+            ddep += idep
+        line[2] = ddep or '-'
 
-            # tags
-            tags = analyze_tags(relfile)
-            line[3] = ''.join(map(tag_from_text, tags)) or '-'
+        # tags
+        tags = analyze_tags(relfile)
+        line[3] = ''.join(map(tag_from_text, tags)) or '-'
 
-            print('|'.join(line), file=f)
+        print('|'.join(line), file=f)
+
+    f.seek(0)
+    md_content = f.read()
+
+    # dump markdowns
+    markdown_path = os.path.join(root, 'README.md')
+    is_root = os.path.relpath(root, base_dir) == '.'
+    if not is_root:
+        with open(markdown_path, 'w', encoding='utf-8') as f:
+            f.write(md_content)
+        continue
+
+    # cut & write root markdown
+    with open(markdown_path, 'r', encoding='utf-8') as f:
+        orig = f.read()
+
+    before = orig.split(root_cut_line)[0].rstrip()
+    with open(markdown_path, 'w', encoding='utf-8') as f:
+        print(before, file=f)
+        print(file=f)
+        print(root_cut_line, file=f)
+        f.write(md_content)

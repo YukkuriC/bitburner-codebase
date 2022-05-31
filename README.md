@@ -16,6 +16,7 @@ Deploy unit|[/unit](./unit)|Scripts to deploy among rooted servers
 Coding contracts|[/c](./c)|Coding contract solver _TODO_
 Outdated scripts|[/old](./old)|Scripts with better choice
 
+<!-- begin script info -->
 # Folder: /
 Code|Description|Dependency|Tags
 -|-|-|-
