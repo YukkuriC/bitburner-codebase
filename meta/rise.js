@@ -1,3 +1,6 @@
+// temporarily boost all stats to extremely HUGE,
+// and permanently gives BADASS karma and kill count
+
 import { player as plr } from '/meta/META'
 
 const skills = ['hacking', 'strength', 'defense', 'dexterity', 'agility', 'charisma']

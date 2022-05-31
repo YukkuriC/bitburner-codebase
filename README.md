@@ -1,10 +1,6 @@
 # YukkuriC's Bitburner code base
 YukkuriC's codebase for Bitburner ([Steam](https://store.steampowered.com/app/1812820/) & [Github](https://github.com/danielyxie/bitburner))
 
-- [YukkuriC's Bitburner code base](#yukkurics-bitburner-code-base)
-- [Folders](#folders)
-- [Scripts](#scripts)
-
 <!-- end header -->
 
 # Folders
@@ -20,5 +16,9 @@ Deploy unit|[/unit](./unit)|Scripts to deploy among rooted servers
 Coding contracts|[/c](./c)|Coding contract solver _TODO_
 Outdated scripts|[/old](./old)|Scripts with better choice
 
-# Scripts
-TODO
+# Folder: /
+Code|Description|Dependency|Tags
+-|-|-|-
+[/BASE.js](./BASE.js)|basic constants and functions|-|<b>ASYNC</b>, <b style="color:cyan">SEARCH</b>
+[/boot.js](./boot.js)|first commands to run after reset|[/BASE.js](./BASE.js)<br>[/meta/exec.js](./meta/exec.js)<details><summary>MORE</summary>[/meta/META.js](./meta/META.js)</details>|<b style="color:gold">EXE</b>, <b>ASYNC</b>, <b style="color:magenta">SINGULARITY</b>, <b style="color:red">EXPLOIT</b>
+[/GOTO.js](./GOTO.js)|auto connect to a distant server|[/i/route.js](./i/route.js)<br>[/meta/exec.js](./meta/exec.js)<details><summary>MORE</summary>[/meta/META.js](./meta/META.js)<br>[/BASE.js](./BASE.js)</details>|<b style="color:gold">EXE</b>, <b>ASYNC</b>, <b style="color:cyan">INFO</b>, <b style="color:cyan">SEARCH</b>, <b style="color:magenta">SINGULARITY</b>, <b style="color:red">EXPLOIT</b>

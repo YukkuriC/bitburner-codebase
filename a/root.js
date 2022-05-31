@@ -1,3 +1,6 @@
+// root all rootable servers with current tools,
+// contains no exploits
+
 import { bfsBind, tools } from 'BASE.js'
 
 export async function main(ns) {

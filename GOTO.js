@@ -1,3 +1,5 @@
+// auto connect to a distant server
+
 import { exec } from '/meta/exec'
 import { findRoute } from '/i/route'
 

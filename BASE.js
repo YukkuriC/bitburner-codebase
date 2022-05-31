@@ -1,3 +1,5 @@
+// basic constants and functions
+
 export const tools = ["BruteSSH.exe", "FTPCrack.exe", "relaySMTP.exe", "HTTPWorm.exe", "SQLInject.exe"]
 
 export function canHack(ns, host) {

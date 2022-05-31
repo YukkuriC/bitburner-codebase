@@ -1,3 +1,6 @@
+// accept dumped scripts from clipboard, and overwrite home server
+// providers: `pusher.py` and `/meta/s/dump.js`
+
 import { player, terminal, paste } from '/meta/META'
 
 export async function main(ns) {

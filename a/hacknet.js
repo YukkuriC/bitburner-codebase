@@ -1,3 +1,6 @@
+// auto purchase hacknet upgrades for max output growth,
+// change `calcFunc` to switch between node & server
+
 function calcNodeRate(level = 1, ram = 1, cores = 1) {
 	return (level * 1.5) * Math.pow(1.035, ram - 1) * ((cores + 5) / 6)
 }

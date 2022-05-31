@@ -1,3 +1,5 @@
+// basic references for exploits, with helper functions
+
 // source hack
 export const doc = eval('document')
 export const global = eval('window')

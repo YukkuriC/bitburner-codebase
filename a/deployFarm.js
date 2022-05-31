@@ -1,3 +1,5 @@
+// deploy farming code to all rooted servers, attacking `args[0]`
+
 import { bfsBind } from 'BASE.js'
 const file = '/unit/farm.js'
 

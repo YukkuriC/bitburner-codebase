@@ -1,3 +1,5 @@
+// auto `deployFarm`, attacking target decided by `farmTarget`
+
 import { main as m_deploy } from '/a/deployFarm'
 import { main as m_search } from '/i/farmTarget'
 

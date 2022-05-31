@@ -1,3 +1,5 @@
+// first commands to run after reset
+
 import { exec } from 'meta/exec'
 import { sleep } from 'BASE'
 

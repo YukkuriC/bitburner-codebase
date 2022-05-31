@@ -1,3 +1,7 @@
+// write all scripts into clipboard
+// format: `{filename: content}`
+// receivers: `puller.py` and `/meta/s/load.js`
+
 import { player, terminal, copy } from '/meta/META'
 
 export async function main(ns) {
