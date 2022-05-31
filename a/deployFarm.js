@@ -1,5 +1,5 @@
 import { bfsBind } from 'BASE.js'
-const file = '/mod/farm.js'
+const file = '/unit/farm.js'
 
 export async function main(ns) {
 	var target = ns.args[0]

@@ -1,4 +1,4 @@
-const GROW_THRESHOLD = 0.6
+const GROW_THRESHOLD = 0.9
 
 export async function main(ns) {
 	ns.disableLog('ALL')
