@@ -10,6 +10,18 @@ export const player = global.player = props.player
 export const terminal = global.terminal = props.terminal
 export const router = global.router = props.router
 
+// clipboard functions
+export async function copy(text) {
+	await navigator.clipboard.writeText(text)
+	if (text.length > 100)
+		text = `${text.substring(0, 100)}...`
+	return text
+}
+export async function paste() {
+	const text = await navigator.clipboard.readText()
+	return text
+}
+
 export async function main(ns) {
 	console.log(props)
 }

@@ -1,21 +1,12 @@
-import { player, doc } from '/meta/META'
-
-function copyToClipboard(text, notify = 1) {
-    var save = function (e) {
-        e.clipboardData.setData('text/plain', text);
-        e.preventDefault();
-    }
-    doc.addEventListener('copy', save);
-    doc.execCommand('copy');
-    doc.removeEventListener('copy', save);
-
-    if (text.length > 100)
-        text = `${text.substring(0, 100)}... (l=${text.length})`
-    if (notify) return alert('Copied: ' + text)
-}
+import { player, terminal, copy } from '/meta/META'
 
 export async function main(ns) {
-    var server = player.getCurrentServer()
-    var data = JSON.stringify(server.scripts)
-    copyToClipboard(data)
+    var server = player.getHomeComputer()
+    var data = {}
+    for (var s of server.scripts) {
+        data[s.filename] = s.code
+    }
+    var json = JSON.stringify(data)
+    var disp = await copy(json)
+    await terminal.print(`Copied: ${disp} (${Object.keys(data).length} files, l=${json.length})`)
 }
