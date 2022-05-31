@@ -17,7 +17,7 @@ except:
     traceback.print_exc()
     exit()
 
-base_dir = os.path.abspath(os.path.join(__file__, '../../..'))
+base_dir = os.path.abspath(os.path.join(__file__, '..'))
 for obj in raw:
     obj = obj['data']
     path = os.path.abspath(os.path.join(base_dir, obj['filename'].lstrip('/')))
