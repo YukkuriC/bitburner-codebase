@@ -1,6 +1,6 @@
 // execute a terminal command, and wait for complete;
 // pass `args[0]` to directly execute the command;
-// a workaround before `ns.singularity` unlocks.
+// a workaround before `BN4`.
 
 import { sleep, waitUntil } from "BASE"
 import { props as p } from '/meta/META'
