@@ -7,11 +7,11 @@ os.chdir(base_dir)
 headers = ['Code', 'Description', 'Dependency', 'Tags']
 tag_colors = {
     'exe': 'gold',
-    'exploit': 'red',
+    'exploit': '%23ff0000',
     'info': 'cyan',
-    'search': 'cyan',
+    'search': 'blue',
     'hack': 'green',
-    'singularity': 'magenta',
+    'singularity': 'purple',
 }
 
 if 'helpers':
@@ -71,12 +71,8 @@ if 'helpers':
 
     def tag_from_text(text):
         style = ''
-        color = tag_colors.get(text)
-        if color:
-            style = f' style="color:{color}"'
-        else:
-            style = ''
-        return f'<b{style}>{text.upper()}</b>'
+        color = tag_colors.get(text, 'black')
+        return f'[![{text}](https://img.shields.io/badge/-{text}-{color})](#{text})'
 
     @lru_cache(None)
     def analyze_tags(path):
@@ -140,6 +136,6 @@ for root, folders, files in os.walk(base_dir):
 
             # tags
             tags = analyze_tags(relfile)
-            line[3] = ', '.join(map(tag_from_text, tags)) or '-'
+            line[3] = ''.join(map(tag_from_text, tags)) or '-'
 
             print('|'.join(line), file=f)
