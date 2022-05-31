@@ -30,10 +30,11 @@ if 'helpers':
             path = '/'
         return path
 
-    def md_link(path):
+    def md_link(path, root):
         lp = link_path(path)
         ld = display_path(path)
-        return f'[{ld}]({lp})'
+        lr = link_path(os.path.relpath(lp, root))
+        return f'[{ld}]({lr})'
 
     @lru_cache(None)
     def code_content(path):
@@ -120,15 +121,15 @@ for root, folders, files in os.walk(base_dir):
         for ff in jss:
             relfile = os.path.join(reldir, ff).replace('\\', '/')
             line = [''] * len(headers)
-            line[0] = md_link(relfile)
+            line[0] = md_link(relfile, root)
 
             # descrip
             line[1] = descriptions(relfile) or 'TODO'
 
             # dependency
             ddep, idep = dependency(relfile)
-            ddep = '<br>'.join(map(md_link, ddep))
-            idep = '<br>'.join(map(md_link, idep))
+            ddep = '<br>'.join((md_link(i, root) for i in ddep))
+            idep = '<br>'.join((md_link(i, root) for i in idep))
             if idep:
                 idep = f'<details><summary>MORE</summary>{idep}</details>'
                 ddep += idep
