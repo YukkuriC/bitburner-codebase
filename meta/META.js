@@ -21,7 +21,3 @@ export async function paste() {
 	const text = await navigator.clipboard.readText()
 	return text
 }
-
-export async function main(ns) {
-	console.log(props)
-}
