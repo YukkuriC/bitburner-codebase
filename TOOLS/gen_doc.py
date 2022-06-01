@@ -145,19 +145,17 @@ for root, folders, files in os.walk(base_dir):
 
     # dump markdowns
     markdown_path = os.path.join(root, 'README.md')
-    is_root = os.path.relpath(root, base_dir) == '.'
-    if not is_root:
-        with open(markdown_path, 'w', encoding='utf-8') as f:
-            f.write(md_content)
-        continue
 
-    # cut & write root markdown
-    with open(markdown_path, 'r', encoding='utf-8') as f:
-        orig = f.read()
-
-    before = orig.split(root_cut_line)[0].rstrip()
+    # cut & write markdown
+    if os.path.isfile(markdown_path):
+        with open(markdown_path, 'r', encoding='utf-8') as f:
+            orig = f.read()
+        before = orig.split(root_cut_line)[0].rstrip()
+    else:
+        before = ''
     with open(markdown_path, 'w', encoding='utf-8') as f:
-        print(before, file=f)
-        print(file=f)
+        if before:
+            print(before, file=f)
+            print(file=f)
         print(root_cut_line, file=f)
         f.write(md_content)

@@ -1,3 +1,4 @@
+<!-- begin script info -->
 # Folder: /s
 Code|Description|Dependency|Tags
 -|-|-|-

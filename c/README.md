@@ -1,3 +1,4 @@
+<!-- begin script info -->
 # Folder: /c
 Code|Description|Dependency|Tags
 -|-|-|-

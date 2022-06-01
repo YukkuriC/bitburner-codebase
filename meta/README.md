@@ -1,3 +1,4 @@
+<!-- begin script info -->
 # Folder: /meta
 Code|Description|Dependency|Tags
 -|-|-|-
