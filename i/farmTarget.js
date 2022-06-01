@@ -8,7 +8,7 @@ export async function search(ns, score_func = score_simple) {
 	var mscore = -1, target = null
 	await bfsBind(ns)(host => {
 		if (canHack(ns, host)) {
-			var score = score_func(host)
+			var score = score_func(ns, host)
 			if (score > mscore) {
 				mscore = score
 				target = host
@@ -20,7 +20,7 @@ export async function search(ns, score_func = score_simple) {
 }
 
 // simple scoring
-export async function score_simple(host) {
+export function score_simple(ns, host) {
 	var maxCash = ns.getServerMaxMoney(host)
 	var minSec = ns.getServerMinSecurityLevel(host)
 	return maxCash / minSec
