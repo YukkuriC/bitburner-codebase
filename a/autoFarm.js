@@ -9,10 +9,14 @@ const FILES = Object.values(ACTION_MAP)
 const CONFIG = {
 	HOME_RESERVE_RAM: 100,
 	SLEEP_INTERVAL: 500,
-	ITER_INTERVAL: 5,
+	ITER_INTERVAL: 1,
 	GROW_THRESHOLD: 0.9,
 	SERVER_CHOICE_EXPIRE: 30 * 1e3,
 	SUMMARY_LOOPS: 60,
+	// update rate adjust
+	SLEEP_DECREASE_RATE: 0.8,
+	SLEEP_INCREASE_RATE: 1.05,
+	SLEEP_INCREASE_SEQ: 5,
 }
 
 function runScript(ns, action, host, target) {
@@ -61,28 +65,49 @@ export async function main(ns) {
 	// loop hosts
 	var loop = 1, target = null, expire = 0
 	var counter = {}
+	var inc_count = 0
 	while (loop++) {
 		// relocate best server
 		var now = new Date()
 		if (now - expire > CONFIG.SERVER_CHOICE_EXPIRE) {
-			target = await search(ns)
+			var newTarget = await search(ns)
 			expire = now
-			ns.print(`Choose target: ${target}`)
+			if (newTarget != target) {
+				target = newTarget
+				ns.print(`Choose target: ${target}`)
+			}
 		}
 
 		// update all servers
+		var newActionCount = 0
 		for (var host of servers) {
 			var action = chooseAction(ns, host, target)
 			if (action) {
 				var times = runScript(ns, action, host, target)
 				counter[action] = (counter[action] || 0) + times
+				newActionCount++
 			}
 			await ns.sleep(CONFIG.ITER_INTERVAL)
 		}
 
+		// auto adjust frame length
+		if (newActionCount == 0) {// too many wait
+			inc_count++
+			if (inc_count >= CONFIG.SLEEP_INCREASE_SEQ) {
+				CONFIG.SLEEP_INTERVAL++
+				CONFIG.SLEEP_INTERVAL *= CONFIG.SLEEP_INCREASE_RATE
+			}
+		} else {
+			inc_count = 0
+			if (newActionCount > 0.9 * servers.length) // too long
+				CONFIG.SLEEP_INTERVAL *= CONFIG.SLEEP_DECREASE_RATE
+		}
+
 		// summary
-		if (loop % CONFIG.SUMMARY_LOOPS == 0)
+		if (loop % CONFIG.SUMMARY_LOOPS == 0) {
 			ns.print(Object.entries(counter).map(x => x.join(': ')).join('; '))
+			ns.print(`Update interval: ${CONFIG.SLEEP_INTERVAL.toFixed(2)}`)
+		}
 		await ns.sleep(CONFIG.SLEEP_INTERVAL)
 	}
 }
