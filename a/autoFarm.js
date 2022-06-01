@@ -16,7 +16,6 @@ const CONFIG = {
 	// update rate adjust
 	SLEEP_DECREASE_RATE: 0.8,
 	SLEEP_INCREASE_RATE: 1.05,
-	SLEEP_INCREASE_SEQ: 5,
 }
 
 function runScript(ns, action, host, target) {
@@ -51,6 +50,7 @@ function chooseAction(ns, host, target) {
 export async function main(ns) {
 	var target = ns.args[0]
 	ns.disableLog('ALL')
+	ns.tail()
 
 	var servers = []
 
@@ -65,7 +65,6 @@ export async function main(ns) {
 	// loop hosts
 	var loop = 1, target = null, expire = 0
 	var counter = {}
-	var inc_count = 0
 	while (loop++) {
 		// relocate best server
 		var now = new Date()
@@ -92,19 +91,15 @@ export async function main(ns) {
 
 		// auto adjust frame length
 		if (newActionCount == 0) {// too many wait
-			inc_count++
-			if (inc_count >= CONFIG.SLEEP_INCREASE_SEQ) {
-				CONFIG.SLEEP_INTERVAL++
-				CONFIG.SLEEP_INTERVAL *= CONFIG.SLEEP_INCREASE_RATE
-			}
-		} else {
-			inc_count = 0
-			if (newActionCount > 0.9 * servers.length) // too long
-				CONFIG.SLEEP_INTERVAL *= CONFIG.SLEEP_DECREASE_RATE
+			CONFIG.SLEEP_INTERVAL++
+			CONFIG.SLEEP_INTERVAL *= CONFIG.SLEEP_INCREASE_RATE
+		} else if (newActionCount > 0.9 * servers.length) {// too long
+			CONFIG.SLEEP_INTERVAL *= CONFIG.SLEEP_DECREASE_RATE
 		}
 
 		// summary
 		if (loop % CONFIG.SUMMARY_LOOPS == 0) {
+			ns.print(`Loop #${loop}, attacking ${target}`)
 			ns.print(Object.entries(counter).map(x => x.join(': ')).join('; '))
 			ns.print(`Update interval: ${CONFIG.SLEEP_INTERVAL.toFixed(2)}`)
 		}
