@@ -3,15 +3,12 @@
 import { bfsBind, canHack } from 'BASE.js'
 import { main as route_main } from 'i/route.js'
 
-export async function main(ns) {
-	var bfs = bfsBind(ns)
+// main search func
+export async function search(ns, score_func = score_simple) {
 	var mscore = -1, target = null
-
-	await bfs(host => {
+	await bfsBind(ns)(host => {
 		if (canHack(ns, host)) {
-			var maxCash = ns.getServerMaxMoney(host)
-			var minSec = ns.getServerMinSecurityLevel(host)
-			var score = maxCash / minSec
+			var score = score_func(host)
 			if (score > mscore) {
 				mscore = score
 				target = host
@@ -19,6 +16,19 @@ export async function main(ns) {
 		}
 	})
 
+	return target
+}
+
+// simple scoring
+export async function score_simple(host) {
+	var maxCash = ns.getServerMaxMoney(host)
+	var minSec = ns.getServerMinSecurityLevel(host)
+	return maxCash / minSec
+}
+
+export async function main(ns) {
+	// search
+	var target = await search(ns)
 	ns.tprint(target)
 
 	// auto route
