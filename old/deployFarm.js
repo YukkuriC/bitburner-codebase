@@ -2,7 +2,7 @@
 // if `args[1]` set, will kill existing script and override
 
 import { bfsBind } from 'BASE.js'
-const file = '/unit/farm.js'
+const file = '/old/farm.js'
 
 export async function main(ns) {
 	var target = ns.args[0]
