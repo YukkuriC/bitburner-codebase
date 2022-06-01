@@ -1,3 +1,7 @@
+// auto crack current BitNode with source hack
+// jump to BN#`args[0]` if provided
+// call `args[1]` after jump if provided
+
 import { player, global } from '/meta/META'
 import { main as root } from '/s/rootAll'
 import { main as rep } from '/s/factionRep'

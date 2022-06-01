@@ -1,3 +1,5 @@
+// auto increase HUGE reputation among companys with faction with EXPLOITS
+
 import { main as rise } from '/meta/rise'
 import { player, terminal } from '/meta/META'
 

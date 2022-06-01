@@ -1,3 +1,6 @@
+// auto recruit gang member, give each all upgrades, and sync all max stats
+// must run after creating a gang
+
 import { player } from 'meta/META'
 
 const stats = [

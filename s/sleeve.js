@@ -1,3 +1,5 @@
+// sync max stats among all sleeves, and augmentations from player
+
 import { player } from 'meta/META'
 
 const sleeves = player.sleeves

@@ -1,3 +1,6 @@
+// force root all servers with EXPLOITS, and backdoor all except world daemon
+// singularity API required
+
 import { player, terminal } from '/meta/META'
 import { main as rise } from '/meta/rise'
 import { bfsBind, tools } from 'BASE.js'

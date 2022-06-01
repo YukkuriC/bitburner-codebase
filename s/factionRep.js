@@ -1,3 +1,5 @@
+// auto increase HUGE faction reputation with EXPLOITS
+
 import { main as rise } from '/meta/rise'
 import { player, terminal } from '/meta/META'
 

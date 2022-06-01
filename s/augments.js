@@ -1,3 +1,6 @@
+// grab all faction augments with EXPLOITS
+// will auto increase faction reputations first
+
 import { player, terminal } from '/meta/META'
 import { main as factionRep } from '/s/factionRep'
 
