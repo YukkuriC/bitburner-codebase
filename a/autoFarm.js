@@ -90,7 +90,7 @@ export async function main(ns) {
 		}
 
 		// auto adjust frame length
-		if (newActionCount == 0) {// too many wait
+		if (newActionCount < 0.1 * servers.length) {// too many wait
 			CONFIG.SLEEP_INTERVAL++
 			CONFIG.SLEEP_INTERVAL *= CONFIG.SLEEP_INCREASE_RATE
 		} else if (newActionCount > 0.9 * servers.length) {// too long
