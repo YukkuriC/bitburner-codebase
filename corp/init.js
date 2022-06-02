@@ -2,7 +2,10 @@
 
 import { Divisions, Cities, SellMaterials } from '/corp/helper'
 
-function bootDivision(C, division) {
+const target = 'Agriculture'
+const initJobs = ["Operations", "Engineer", "Business"]
+
+async function bootDivision(C, division) {
     try { C.expandIndustry(division, division) } catch (e) { }
 
     // warehouse
@@ -14,9 +17,14 @@ function bootDivision(C, division) {
 
     // office
     for (var city of divisionData.cities) {
-        // TODO1
+        var officeInfo = C.getOffice(division, city)
+        var ee = officeInfo.employees
+        while (ee.length < officeInfo.size)
+            ee.push(await C.hireEmployee(division, city).name)
+        for (var j of initJobs) {
+            await C.setAutoJobAssignment(division, city, j, 1)
+        }
     }
-
 }
 
 function setSupply(C, division) {
@@ -30,10 +38,8 @@ function setSupply(C, division) {
 
 export async function main(ns) {
     const C = ns['corporation']
-    const target = Divisions[ns.args[0] || 0]
-    var corpInfo = C.getCorporation()
 
-    bootDivision(C, target)
+    await bootDivision(C, target)
 
     // set supply
     try { C.unlockUpgrade('Smart Supply') } catch (e) { }
