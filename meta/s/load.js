@@ -9,17 +9,21 @@ export async function main(ns) {
         var data = await paste()
         data = JSON.parse(data)
     } catch (e) {
-        console.log(e)
+        console.error(e)
         terminal.print(`Read clipboard failed: ${e}`)
         return
     }
     // 2. clear local files
     var home = player.getHomeComputer()
-    home.scripts.map(x => x.filename).filter(x => !data[x]).forEach(x => home.removeFile(x))
+    Array.from(home.scripts.keys())
+        .filter((x) => !data[x])
+        .forEach((x) => {
+            console.log(`Removed: ${x}`)
+            home.removeFile(x)
+        })
     // 3. write files
     for (var [fname, code] of Object.entries(data)) {
-        if (fname.indexOf('/') > 0 && fname[0] != '/')
-            fname = '/' + fname
-        home.writeToScriptFile(player, fname, code)
+        home.writeToScriptFile(fname, code)
+        console.log(`Updated: ${fname}`)
     }
 }

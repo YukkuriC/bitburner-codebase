@@ -7,7 +7,7 @@ import { player, terminal, copy } from '/meta/META'
 export async function main(ns) {
     var server = player.getHomeComputer()
     var data = {}
-    for (var s of server.scripts) {
+    for (var s of server.scripts.values()) {
         data[s.filename] = s.code
     }
     var json = JSON.stringify(data)
