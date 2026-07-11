@@ -3,7 +3,7 @@
 
 import { player } from 'meta/META'
 
-const JOBS = ["Operations", "Engineer", "Business", "Management", "Research & Development", "Training",]
+const JOBS = ['Operations', 'Engineer', 'Business', 'Management', 'Research & Development', 'Training']
 const OFFICE_SIZE = 500
 const OFFICE_TOTAL = OFFICE_SIZE * JOBS.length
 const WAREHOUSE_SIZE = 1000
@@ -22,10 +22,9 @@ export async function main(ns) {
             if (!off.size) continue
             off.size = Math.max(off.size, OFFICE_TOTAL)
 
-            while (off.employees.length < off.size)
-                off.hireRandomEmployee()
+            while (off.employees.length < off.size) off.hireRandomEmployee()
 
-            JOBS.forEach(j => off.setEmployeeToJob(j, OFFICE_SIZE))
+            JOBS.forEach((j) => off.setEmployeeToJob(j, OFFICE_SIZE))
         }
         //warehouse
         for (var wh of Object.values(div.warehouses)) {
