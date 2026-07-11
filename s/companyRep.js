@@ -69,7 +69,11 @@ export async function main(ns) {
         if (oldRep > repLim) continue
         for (var w of Object.values(works)) {
             rise()
-            ns.singularity.applyToCompany(c, w)
+            let job = ns.singularity.applyToCompany(c, w)
+            if (!job) {
+                // console.log(`Failed to apply ${w} to ${c}`)
+                continue
+            }
             ns.singularity.workForCompany(c)
             await ns.sleep(100)
             ns.singularity.stopAction()

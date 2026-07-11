@@ -31,7 +31,7 @@ export async function breaker(ns, nextNode, nextScript) {
         await rep(ns)
         await aug(ns)
         store_args(nextNode, nextScript)
-        await ns.installAugmentations('/s/break.js')
+        await ns.singularity.installAugmentations('/s/break.js')
         return
     }
 

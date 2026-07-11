@@ -3,7 +3,7 @@
 
 import { player, terminal } from '/meta/META'
 import { main as rise } from '/meta/rise'
-import { bfsBind, tools } from 'BASE.js'
+import { bfsBind, tools, isNormalServer } from 'BASE.js'
 
 export async function main(ns) {
     // var origMoney = player.money
@@ -12,7 +12,9 @@ export async function main(ns) {
     var home = player.getHomeComputer()
     for (var t of tools) if (!home.programs.find((x) => x.toLowerCase() == t.toLowerCase())) home.programs.push(t)
     // hack all
-    await bfsBind(ns)(HHHack, (s) => s != 'home')
+    await bfsBind(ns)(HHHack, (s) => {
+        return isNormalServer(s) && s != 'home'
+    })
 
     async function HHHack(host, root) {
         await ns.singularity.connect(root)
