@@ -26,6 +26,7 @@ export function forEachWebpackModule(mapFunc) {
         }
     }
 }
+global.forEachWebpackModule = forEachWebpackModule
 
 // expose core objects
 if (!global.props) {
