@@ -12,7 +12,7 @@ export async function main(ns) {
         for (var f of player.factions) {
             for (var a of ns.singularity.getAugmentationsFromFaction(f)) {
                 if (player.augmentations.find((x) => x.name == a)) continue
-                var [rep, cost] = ns.singularity.getAugmentationCost(a)
+                var [rep, cost] = [ns.singularity.getAugmentationRepReq(a), ns.singularity.getAugmentationPrice(a)]
                 player.money += cost
                 var success = ns.singularity.purchaseAugmentation(f, a)
                 if (success) {

@@ -3,7 +3,7 @@
 import { main as rise } from '/meta/rise'
 import { player, terminal } from '/meta/META'
 
-const works = ['Hacking Contracts', 'Field Work', 'Security Work']
+const works = ['hacking', 'field', 'security']
 const repLim = 1e30
 
 export async function main(ns) {
