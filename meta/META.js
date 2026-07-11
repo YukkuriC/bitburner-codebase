@@ -1,21 +1,22 @@
 // basic references for exploits, with helper functions
 
 export let doc = eval('document')
+export const global = eval('globalThis')
 
 // webpack exploit
 // credits: discord server
 function exposeRequire() {
-    if (globalThis.webpackRequire) return
-    globalThis.webpackChunkbitburner.push([[-1], {}, (webpackRequire) => (globalThis.webpackRequire = webpackRequire)])
+    if (global.webpackRequire) return
+    global.webpackChunkbitburner.push([[-1], {}, (webpackRequire) => (global.webpackRequire = webpackRequire)])
 }
 export function forEachWebpackModule(mapFunc) {
-    if (!globalThis.webpackChunkbitburner) {
+    if (!global.webpackChunkbitburner) {
         return
     }
     exposeRequire()
     const skippedModuleIds = new Set(Object.keys(webpackChunkbitburner[0][1]))
-    for (const moduleId of Object.keys(globalThis.webpackRequire.m).filter((id) => !skippedModuleIds.has(id))) {
-        const module = globalThis.webpackRequire(moduleId)
+    for (const moduleId of Object.keys(global.webpackRequire.m).filter((id) => !skippedModuleIds.has(id))) {
+        const module = global.webpackRequire(moduleId)
         if (!module) {
             continue
         }
@@ -27,7 +28,7 @@ export function forEachWebpackModule(mapFunc) {
 }
 
 // expose core objects
-if (!globalThis.props) {
+if (!global.props) {
     const props = {}
     forEachWebpackModule((obj) => {
         if (obj.outputHistory) {
@@ -40,10 +41,10 @@ if (!globalThis.props) {
             props.router = obj
         }
     })
-    globalThis.props = props
-    Object.assign(globalThis, props)
+    global.props = props
+    Object.assign(global, props)
 }
-export const props = globalThis.props
+export const props = global.props
 export let player = props.player
 export let terminal = props.terminal
 export let router = props.router
