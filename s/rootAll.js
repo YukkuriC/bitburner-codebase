@@ -13,7 +13,7 @@ export async function main(ns) {
     for (var t of tools) if (!home.programs.find((x) => x.toLowerCase() == t.toLowerCase())) home.programs.push(t)
     // hack all
     await bfsBind(ns)(HHHack, (s) => {
-        return isNormalServer(s) && s != 'home'
+        return isNormalServer(ns, s) && s != 'home'
     })
 
     async function HHHack(host, root) {

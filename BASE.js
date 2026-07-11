@@ -2,14 +2,14 @@
 
 export const tools = ['BruteSSH.exe', 'FTPCrack.exe', 'relaySMTP.exe', 'HTTPWorm.exe', 'SQLInject.exe']
 
-export function isNormalServer(host) {
+export function isNormalServer(ns, host) {
     if (host.startsWith('hacknet-')) return false
-    // todo: what is darknet?
+    if (ns.dnet.isDarknetServer(host)) return false
     return true
 }
 
 export function canHack(ns, host) {
-    if (!isNormalServer(host)) return false
+    if (!isNormalServer(ns, host)) return false
     return ns.hasRootAccess(host) && ns.getHackingLevel() >= ns.getServerRequiredHackingLevel(host)
 }
 
