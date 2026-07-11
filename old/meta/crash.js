@@ -1,5 +1,5 @@
 // cause an instant crash in terminal,
-// can be used for resetting
+// no more crashing in v3
 
 import { sleep, waitUntil } from 'BASE'
 import { player, terminal } from '/meta/META'
