@@ -1,4 +1,5 @@
 // basic references for exploits, with helper functions
+// only working in v1.x
 
 // source hack
 export const doc = eval('document')

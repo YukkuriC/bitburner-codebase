@@ -50,7 +50,7 @@ function chooseAction(ns, host, target) {
 export async function main(ns) {
 	var target = ns.args[0]
 	ns.disableLog('ALL')
-	ns.tail()
+	ns.ui.openTail()
 
 	var servers = []
 
