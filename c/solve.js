@@ -2,12 +2,7 @@
 // solve a coding contract `args[1]` on server `args[0]`
 // if `args[2]` provided, then only display solution without submission.
 
-import { dePrime, cached } from '/c/helper'
-
-const stringfy = (o) => {
-    if (typeof o == 'object') return JSON.stringify(o)
-    return o + ''
-}
+import { dePrime, cached, stringfy } from '/c/helper'
 
 const MAPPER = {
     'Find Largest Prime Factor': (num) => {
@@ -103,7 +98,7 @@ export async function core_solver(ns, host, filename, noReturn = false) {
         var answer = solver(cInput)
         ns.tprint(`Answer: ${answer}`)
         if (noReturn) return
-        return nc.attempt(answer, filename, host, { returnReward: true })
+        return nc.attempt(answer, filename, host)
     }
 }
 

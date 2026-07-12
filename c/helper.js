@@ -1,5 +1,10 @@
 // helper functions for coding contracts
 
+export function stringfy(o) {
+    if (typeof o == 'object') return JSON.stringify(o)
+    return o + ''
+}
+
 export function dePrime(num) {
     var cnt = {}
     for (var i = 2; i * i < num; i++) {
