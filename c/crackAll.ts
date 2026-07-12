@@ -1,3 +1,5 @@
+// Search & crack all existing Coding Contracts once and for all :)
+
 import { forEachWebpackModule } from '/meta/META'
 import { searchContracts } from './search'
 import { stringfy } from '/c/helper'

@@ -9,6 +9,7 @@ from common import walk_without_ignored, is_script
 
 headers = ['Code', 'Description', 'Dependency', 'Tags']
 tag_colors = {
+    'TS': 'blue',
     'exe': 'gold',
     'exploit': '%23ff0000',
     'info': 'cyan',
@@ -26,7 +27,13 @@ if 'helpers':
         path = os.path.relpath(path, base_dir)
         if not path.startswith('.'):
             path = './' + path
-        return path.replace('\\', '/')
+        path = path.replace('\\', '/')
+        for ext in '', '.js', '.ts':
+            pp = os.path.join(base_dir, path + ext)
+            if os.path.exists(pp):
+                path += ext
+                break
+        return path
 
     def display_path(path):
         path = link_path(path)[1:]
@@ -59,12 +66,16 @@ if 'helpers':
 
     @lru_cache(None)
     def dependency(path):
+        path_dir = os.path.dirname(path)
         code = code_content(path)
-        dep = re.findall(r"""import {.*} from ['"](.+)['"]""", code)
-        for i, f in enumerate(dep):
-            if not f.endswith('.js'):
-                dep[i] = f + '.js'
-        dep = set(dep)
+        dep_raw = re.findall(r"""import {.*} from ['"](.+)['"]""", code)
+        dep = set()
+        for f in dep_raw:
+            if f.startswith('./'):
+                f = os.path.relpath(os.path.join(path_dir, f), base_dir)
+            # Normalize bare module names to avoid duplicates like 'BASE' vs 'BASE.js'
+            f = link_path(f)
+            dep.add(f)
 
         idep = set()
         for f in dep:
@@ -75,7 +86,6 @@ if 'helpers':
         return sorted(dep), sorted(idep)
 
     def tag_from_text(text):
-        style = ''
         color = tag_colors.get(text, 'black')
         return f'[![{text}](https://img.shields.io/badge/-{text}-{color})](#{text})'
 
@@ -89,6 +99,8 @@ if 'helpers':
         has_code = lambda *kws: any(kw in code for kw in kws)
         has_dep = lambda tag: any(tag in analyze_tags(p) for p in dep if 'BASE' not in p)
 
+        if path.endswith('.ts'):
+            tags.append('TS')
         if has_code('function main'):
             tags.append('exe')
         if has_code('await'):
