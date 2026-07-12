@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "/*": ["./*"]
+        },
+        // "checkJs": true,
+        "noEmit": true,
+        "module": "ESNext",
+        "moduleResolution": "node",
+        "lib": ["ES2015", "DOM"]
+    },
+    "include": ["**/*.js", "**/*.ts", "**/*.d.ts"],
+    "exclude": ["node_modules", "old"]
+}

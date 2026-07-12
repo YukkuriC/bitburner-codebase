@@ -1,0 +1,7 @@
+{
+    "name": "bitburner-types-fetcher",
+    "version": "1.0.0",
+    "scripts": {
+        "fetchTypes": "node TOOLS/fetch-types.js"
+    }
+}
