@@ -18,10 +18,12 @@ except:
     exit()
 
 base_dir = os.path.abspath(os.path.join(__file__, '../..'))
+from common import walk_without_ignored, is_script
+
 # remove old
-for root, folders, files in os.walk(base_dir):
+for root, folders, files in walk_without_ignored():
     for f in files:
-        if f.endswith('.js') and f not in raw:
+        if is_script(f) and f not in raw:
             os.remove(os.path.join(root, f))
     if not os.listdir(root):
         os.removedirs(root)

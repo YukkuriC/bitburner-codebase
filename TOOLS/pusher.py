@@ -19,9 +19,11 @@ def dump_clipboard(data):
 
 data = {}
 base_dir = os.path.abspath(os.path.join(__file__, '../..'))
-for root, folders, files in os.walk(base_dir):
+from common import walk_without_ignored, is_script
+
+for root, folders, files in walk_without_ignored():
     for f in files:
-        if not f.endswith('.js'):
+        if not is_script(f):
             continue
         absname = os.path.join(root, f)
         relname = os.path.relpath(absname, base_dir).replace('\\', '/')

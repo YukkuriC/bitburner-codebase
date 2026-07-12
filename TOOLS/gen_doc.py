@@ -5,6 +5,8 @@ from io import StringIO
 base_dir = os.path.abspath(__file__ + '/../..')
 os.chdir(base_dir)
 
+from common import walk_without_ignored, is_script
+
 headers = ['Code', 'Description', 'Dependency', 'Tags']
 tag_colors = {
     'exe': 'gold',
@@ -58,7 +60,7 @@ if 'helpers':
     @lru_cache(None)
     def dependency(path):
         code = code_content(path)
-        dep = re.findall(r'''import {.*} from ['"](.+)['"]''', code)
+        dep = re.findall(r"""import {.*} from ['"](.+)['"]""", code)
         for i, f in enumerate(dep):
             if not f.endswith('.js'):
                 dep[i] = f + '.js'
@@ -95,8 +97,7 @@ if 'helpers':
             tags.append('info')
         if has_code('bfs', 'dfs') or has_dep('search'):
             tags.append('search')
-        if has_code('ns.nuke', 'ns.hack', 'ns.exec',
-                    'ns.scp') or has_dep('hack'):
+        if has_code('ns.nuke', 'ns.hack', 'ns.exec', 'ns.scp') or has_dep('hack'):
             tags.append('hack')
         if has_code('singularity') or has_dep('singularity'):
             tags.append('singularity')
@@ -106,8 +107,8 @@ if 'helpers':
         return tags
 
 
-for root, folders, files in os.walk(base_dir):
-    jss = [f for f in files if f.endswith('.js')]
+for root, folders, files in walk_without_ignored():
+    jss = [f for f in files if is_script(f)]
     if not jss:
         continue
 
