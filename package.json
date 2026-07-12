@@ -1,7 +1,13 @@
 {
-    "name": "bitburner-types-fetcher",
+    "name": "bitburner-remote-api",
     "version": "1.0.0",
+    "description": "Bitburner Remote API Server for file synchronization",
     "scripts": {
-        "fetchTypes": "node TOOLS/fetch-types.js"
+        "fetchTypes": "node TOOLS/fetch-types.js",
+        "remote": "node TOOLS/remote-api-server.js"
+    },
+    "dependencies": {
+        "chokidar": "^4.0.0",
+        "ws": "^8.18.0"
     }
 }
