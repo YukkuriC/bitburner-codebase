@@ -21,7 +21,7 @@ export async function dfsCall(scanFunc, callFunc, filter = null, host = 'home', 
     for (var s of targets) {
         if (used[s]) continue
         used[s] = true
-        if (callFunc && filter(s)) await callFunc(s, host)
+        if (callFunc && (await filter(s))) await callFunc(s, host)
         await dfsCall(scanFunc, callFunc, filter, s, used)
     }
 }
@@ -37,7 +37,7 @@ export async function bfsCall(scanFunc, callFunc, filter = null, host = 'home') 
             for (var s of targets) {
                 if (used[s]) continue
                 used[s] = true
-                if (callFunc && filter(s)) await callFunc(s, root)
+                if (callFunc && (await filter(s))) await callFunc(s, root)
                 newLayer.push(s)
             }
         }
