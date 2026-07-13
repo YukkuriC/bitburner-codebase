@@ -97,6 +97,19 @@ export const ModelCrackers = {
         await resendUntilReached(ns, host, pw)
         return pw
     },
+    BellaCuore: async (ns: NS, host: string, details: DarknetServerDetails) => {
+        const roman = details.data
+        let ret = 0
+        for (let i = 0; i < roman.length; i++) {
+            const cur = R.romanDigits[roman[i]] ?? 0
+            const next = R.romanDigits[roman[i + 1]] ?? 0
+            if (cur < next) ret -= cur
+            else ret += cur
+        }
+        const pw = String(ret)
+        await resendUntilReached(ns, host, pw)
+        return pw
+    },
 
     // interactive
     'PHP 5.4': async (ns: NS, host: string, details: DarknetServerDetails) => {
