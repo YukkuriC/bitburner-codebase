@@ -17,6 +17,7 @@ export async function findRoute(ns, source, target) {
         ptr = source
     while (ptr != target) {
         ptr = parent[ptr]
+        if (!ptr) throw `no route`
         route.push(ptr)
     }
 
