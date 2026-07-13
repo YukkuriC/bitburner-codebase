@@ -14,7 +14,7 @@ export function canHack(ns, host) {
 }
 
 // DFS & BFS
-async function dfsCall(scanFunc, callFunc, filter = null, host = 'home', used = null) {
+export async function dfsCall(scanFunc, callFunc, filter = null, host = 'home', used = null) {
     filter = filter || ((s) => true)
     used = used || {}
     var targets = await scanFunc(host)
@@ -25,7 +25,7 @@ async function dfsCall(scanFunc, callFunc, filter = null, host = 'home', used = 
         await dfsCall(scanFunc, callFunc, filter, s, used)
     }
 }
-async function bfsCall(scanFunc, callFunc, filter = null, host = 'home') {
+export async function bfsCall(scanFunc, callFunc, filter = null, host = 'home') {
     filter = filter || ((s) => true)
 
     var used = {}
