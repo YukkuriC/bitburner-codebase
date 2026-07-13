@@ -71,20 +71,6 @@ export const ModelCrackers = {
     'CloudBlare(tm)': RegexMatch(/\d+/g, 'data', (m) => m.join('')),
     'FreshInstall_1.0': DictAttack(R.pwDefault),
     Laika4: DictAttack(R.pwDog),
-    'AccountsManager_4.2': async (ns: NS, host: string, details: DarknetServerDetails) => {
-        let [min, max] = SearchRange(details)
-        // bsearch
-        while (min <= max) {
-            let mid = Math.floor((min + max) / 2)
-            let pw = mid.toString()
-            if (pw.length < details.passwordLength) pw = '0'.repeat(details.passwordLength - pw.length) + pw
-            const auth = await ns.dnet.authenticate(host, pw)
-            if (auth.success) return pw
-            if (auth.message === 'Higher') min = mid + 1
-            else max = mid - 1
-        }
-        error(ns, 'binary search failed, why?', details)
-    },
     Pr0verFl0: RegexMatch(/\d+/g, 'passwordHint', (m, d) => '0'.repeat(d.passwordLength + Number(m.join('')))),
     // the password is the base 13 number 129 in base 10
     OctantVoxel: async (ns: NS, host: string, details: DarknetServerDetails) => {
@@ -116,6 +102,20 @@ export const ModelCrackers = {
     },
     // no, we need heartbleed here, damn
     /*
+    'AccountsManager_4.2': async (ns: NS, host: string, details: DarknetServerDetails) => {
+        let [min, max] = SearchRange(details)
+        // bsearch
+        while (min <= max) {
+            let mid = Math.floor((min + max) / 2)
+            let pw = mid.toString()
+            if (pw.length < details.passwordLength) pw = '0'.repeat(details.passwordLength - pw.length) + pw
+            const auth = await ns.dnet.authenticate(host, pw)
+            if (auth.success) return pw
+            if (auth.message === 'Higher') min = mid + 1
+            else max = mid - 1
+        }
+        error(ns, 'binary search failed, why?', details)
+    },
     'Factori-Os': async (ns: NS, host: string, details: DarknetServerDetails) => {
         let candidates = Array(SearchRange(details)[1])
             .fill(0)
