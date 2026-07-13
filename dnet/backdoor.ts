@@ -7,7 +7,7 @@ export async function main(ns: NS) {
     const { singularity, dnet } = ns
     ns.tprint('backdoor start')
     await dfsCall(
-        (s) => getProbes(ns, s),
+        (s) => getProbes(s),
         async (host, root) => {
             singularity.connect(root)
             singularity.connect(host)
@@ -19,7 +19,7 @@ export async function main(ns: NS) {
             const details = dnet.getServerDetails(s)
             if (details.hasSession) return true
 
-            const pw = getPassword(ns, s)
+            const pw = getPassword(s)
             if (typeof pw !== 'string') return false
             const ret = await ns.dnet.connectToSession(s, pw)
             return ret.success

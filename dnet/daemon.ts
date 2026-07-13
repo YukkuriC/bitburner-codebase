@@ -8,14 +8,15 @@ export async function main(ns: NS) {
     const host = ns.getHostname()
     while (1) {
         const probes = (await ns.dnet.probe()).filter((x) => {
-            if (x === 'darkweb' || x === host) return false
+            if (x === host) return false
             return ns.dnet.isDarknetServer(x)
         })
-        fs.setProbes(ns, host, probes)
+        fs.setProbes(host, probes)
         for (const sub of probes) {
+            if (sub === 'darkweb') continue
             if (ns.scriptRunning(ns.getScriptName(), sub)) continue
             await callWait(ns, 'hack', host, [sub])
-            const pw = fs.getPassword(ns, sub)
+            const pw = fs.getPassword(sub)
             if (typeof pw !== 'string') continue
             await dnet.connectToSession(sub, pw)
             await callWait(ns, 'copier', host, [sub, pw])
