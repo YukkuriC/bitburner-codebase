@@ -89,7 +89,7 @@ export const ModelCrackers = {
         const [mulRaw, numRaw] = details.data.split(',')
         const mul = Number(mulRaw)
         let ret = 0
-        for (const char of Array.from(numRaw).reverse()) {
+        for (const char of Array.from(numRaw)) {
             ret *= mul
             if (char >= '0' && char <= '9') {
                 ret += Number(char)
