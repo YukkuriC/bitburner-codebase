@@ -82,9 +82,9 @@ export const ModelCrackers = {
             if (char >= '0' && char <= '9') {
                 ret += Number(char)
             } else if (char >= 'a' && char <= 'z') {
-                ret += char.charCodeAt(0) - 97
+                ret += char.charCodeAt(0) - 97 + 10
             } else if (char >= 'A' && char <= 'Z') {
-                ret += char.charCodeAt(0) - 65
+                ret += char.charCodeAt(0) - 65 + 10
             }
         }
         const pw = String(ret)
