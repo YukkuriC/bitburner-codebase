@@ -1,3 +1,5 @@
+// entry deploying daemons starting from darkweb
+// called on home server
 import { call, callWait } from './libs/callLib'
 
 export async function main(ns: NS) {

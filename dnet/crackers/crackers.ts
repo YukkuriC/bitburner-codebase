@@ -1,3 +1,5 @@
+// including all supported crackers for all types of dnet servers
+// used by hackLib
 import * as R from './rainbowSheet'
 
 // ========== helpers ==========

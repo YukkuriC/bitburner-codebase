@@ -71,7 +71,7 @@ if 'helpers':
         dep_raw = re.findall(r"""import {.*} from ['"](.+)['"]""", code)
         dep = set()
         for f in dep_raw:
-            if f.startswith('./'):
+            if f.startswith('.'):
                 f = os.path.relpath(os.path.join(path_dir, f), base_dir)
             # Normalize bare module names to avoid duplicates like 'BASE' vs 'BASE.js'
             f = link_path(f)
@@ -136,7 +136,7 @@ for root, folders, files in walk_without_ignored():
         line[0] = md_link(relfile, root)
 
         # descrip
-        line[1] = descriptions(relfile) or 'TODO'
+        line[1] = descriptions(relfile) or '-'
 
         # dependency
         ddep, idep = dependency(relfile)
