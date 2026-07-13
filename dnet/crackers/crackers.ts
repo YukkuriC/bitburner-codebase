@@ -84,6 +84,25 @@ export const ModelCrackers = {
         error(ns, 'binary search failed, why?', details)
     },
     Pr0verFl0: RegexMatch(/\d+/g, 'passwordHint', (m, d) => '0'.repeat(d.passwordLength + Number(m.join('')))),
+    // the password is the base 13 number 129 in base 10
+    OctantVoxel: async (ns: NS, host: string, details: DarknetServerDetails) => {
+        const [mulRaw, numRaw] = details.data.split(',')
+        const mul = Number(mulRaw)
+        let ret = 0
+        for (const char of Array.from(numRaw).reverse()) {
+            ret *= mul
+            if (char >= '0' && char <= '9') {
+                ret += Number(char)
+            } else if (char >= 'a' && char <= 'z') {
+                ret += char.charCodeAt(0) - 97
+            } else if (char >= 'A' && char <= 'Z') {
+                ret += char.charCodeAt(0) - 65
+            }
+        }
+        const pw = String(ret)
+        await ns.dnet.authenticate(host, pw)
+        return pw
+    },
 
     // interactive
     'PHP 5.4': async (ns: NS, host: string, details: DarknetServerDetails) => {
@@ -93,10 +112,12 @@ export const ModelCrackers = {
         }
         error(ns, 'shuffle search failed, why?', details)
     },
+    // no, we need heartbleed here, damn
+    /*
     'Factori-Os': async (ns: NS, host: string, details: DarknetServerDetails) => {
-        let candidates = Array(SearchRange(details)[1] + 1)
+        let candidates = Array(SearchRange(details)[1])
             .fill(0)
-            .map((_, i) => i)
+            .map((_, i) => i + 1)
         // bsearch
         while (candidates.length > 0) {
             let test = candidates.shift()
@@ -105,7 +126,7 @@ export const ModelCrackers = {
             if (auth.success) return pw
             const notDivisible = auth.data == false
             candidates = candidates.filter((c) => !(c % test > 0) === notDivisible)
-            // TODO glitchy for now, needs debugging
+            // no, we need heartbleed here, damn
             ns.tprint(`test ${test} ${notDivisible} ${JSON.stringify(auth)} ${candidates.join(',')}`)
         }
         error(ns, 'factor search failed, why?', details)
@@ -127,4 +148,5 @@ export const ModelCrackers = {
         }
         error(ns, 'mask test failed, why?', details)
     },
+    */
 }
