@@ -1,6 +1,6 @@
 // Search & crack all existing Coding Contracts once and for all :)
 
-import { forEachWebpackModule } from '/meta/META'
+import { forEachWebpackExports } from '/meta/META'
 import { searchContracts } from './search'
 import { stringfy } from '/c/helper'
 import { findRoute } from '/i/route'
@@ -70,7 +70,7 @@ export async function cracker(ns: NS, host: string, filename: string) {
 }
 
 export async function main(ns: NS) {
-    forEachWebpackModule((m) => {
+    forEachWebpackExports((m) => {
         if (m && m['Find Largest Prime Factor'] && m['Algorithmic Stock Trader IV']) {
             console.log(m)
             contractDef = m

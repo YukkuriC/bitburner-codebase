@@ -9,7 +9,7 @@ function exposeRequire() {
     if (global.webpackRequire) return
     global.webpackChunkbitburner.push([[-1], {}, (webpackRequire) => (global.webpackRequire = webpackRequire)])
 }
-export function forEachWebpackModule(mapFunc) {
+export function forEachWebpackExports(mapFunc) {
     if (!global.webpackChunkbitburner) {
         return
     }
@@ -26,12 +26,12 @@ export function forEachWebpackModule(mapFunc) {
         }
     }
 }
-global.forEachWebpackModule = forEachWebpackModule
+global.forEachWebpackModule = forEachWebpackExports
 
 // expose core objects
 if (!global.props) {
     const props = {}
-    forEachWebpackModule((obj) => {
+    forEachWebpackExports((obj) => {
         if (obj.outputHistory) {
             props.terminal = obj
         }
