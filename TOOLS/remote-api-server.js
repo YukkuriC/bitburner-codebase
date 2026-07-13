@@ -344,7 +344,14 @@ function startWatcher() {
             if (parts.some(part => ignoredDirs.includes(part))) return true
             // 忽略非脚本文件
             const basename = path.basename(filePath)
-            if (filePath !== baseDir && !isScript(basename) && !fs.statSync(filePath).isDirectory()) return true
+            if (filePath !== baseDir && !isScript(basename)) {
+                try {
+                    if (!fs.statSync(filePath).isDirectory()) return true
+                } catch (e) {
+                    // 文件可能已被删除，忽略错误
+                    return true
+                }
+            }
             return false
         },
         ignoreInitial: true,
