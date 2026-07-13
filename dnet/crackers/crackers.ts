@@ -34,12 +34,18 @@ function* shuffleStr(str: string) {
         }
     }
 }
+async function resendUntilReached(ns: NS, host: string, pw: string) {
+    while (1) {
+        const res = await ns.dnet.authenticate(host, pw)
+        if (res.code != 408) return res
+    }
+}
 
 // ========== factory ==========
 function DictAttack(src: string[]) {
     return async (ns: NS, host: string, details: DarknetServerDetails) => {
         for (const m of filterPwList(src, details)) {
-            const res = await ns.dnet.authenticate(host, m)
+            const res = await resendUntilReached(ns, host, m)
             if (res.success) return m
         }
         error(ns, 'UPDATE YOUR RAINBOW SHEET', details)
@@ -50,7 +56,7 @@ function RegexMatch(re: RegExp, key: keyof DarknetServerDetails, onMatch: (m: Re
         const nums = String(details[key]).match(re)
         if (!nums) error(ns, 'UPDATE YOUR REGEXP', details)
         const pw = onMatch(nums, details)
-        const res = await ns.dnet.authenticate(host, pw)
+        const res = await resendUntilReached(ns, host, pw)
         if (!res.success) error(ns, 'regex matched but failed\dMsg:' + JSON.stringify(res), details)
         return pw
     }
@@ -64,7 +70,7 @@ function SearchRange(details: DarknetServerDetails) {
 export const ModelCrackers = {
     // calculated
     ZeroLogon: async (ns: NS, host: string) => {
-        await ns.dnet.authenticate(host, '')
+        await await resendUntilReached(ns, host, '')
         return ''
     },
     'DeskMemo_3.1': RegexMatch(/\d+/g, 'passwordHint', (m) => m[0]),
@@ -88,14 +94,14 @@ export const ModelCrackers = {
             }
         }
         const pw = String(ret)
-        await ns.dnet.authenticate(host, pw)
+        await resendUntilReached(ns, host, pw)
         return pw
     },
 
     // interactive
     'PHP 5.4': async (ns: NS, host: string, details: DarknetServerDetails) => {
         for (const shuffled of shuffleStr(details.data)) {
-            const auth = await ns.dnet.authenticate(host, shuffled)
+            const auth = await resendUntilReached(ns, host, shuffled)
             if (auth.success) return shuffled
         }
         error(ns, 'shuffle search failed, why?', details)
@@ -109,7 +115,7 @@ export const ModelCrackers = {
             let mid = Math.floor((min + max) / 2)
             let pw = mid.toString()
             if (pw.length < details.passwordLength) pw = '0'.repeat(details.passwordLength - pw.length) + pw
-            const auth = await ns.dnet.authenticate(host, pw)
+            const auth = await resendUntilReached(ns, host, pw)
             if (auth.success) return pw
             if (auth.message === 'Higher') min = mid + 1
             else max = mid - 1
@@ -124,7 +130,7 @@ export const ModelCrackers = {
         while (candidates.length > 0) {
             let test = candidates.shift()
             let pw = String(test)
-            const auth = await ns.dnet.authenticate(host, pw)
+            const auth = await resendUntilReached(ns, host, pw)
             if (auth.success) return pw
             const notDivisible = auth.data == false
             candidates = candidates.filter((c) => !(c % test > 0) === notDivisible)
@@ -141,7 +147,7 @@ export const ModelCrackers = {
                 if (typeof locked[i] === 'number') fill[i] = locked[i]
             }
             const pw = fill.join('')
-            const auth = await ns.dnet.authenticate(host, pw)
+            const auth = await resendUntilReached(ns, host, pw)
             if (auth.success) return pw
             const mask = auth.data.split(',').map((x) => x === 'yes')
             for (let i = 0; i < details.passwordLength; i++) {
