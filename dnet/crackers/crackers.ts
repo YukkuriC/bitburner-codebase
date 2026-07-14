@@ -165,6 +165,7 @@ const ModelCrackers = {
     // ========== bleeding interactive ==========
     // no, we need heartbleed here, damn
     // or we have our own bleeding
+    /* unstable, disabled
     OpenWebAccessPoint: async (ns: NS, host: string, details: DarknetServerDetails) => {
         await resendUntilReached(ns, host, '')
         let msg = terminal.meta.heartbleed(host).data
@@ -173,6 +174,7 @@ const ModelCrackers = {
         await resendUntilReached(ns, host, pw)
         return pw
     },
+     */
     'AccountsManager_4.2': async (ns: NS, host: string, details: DarknetServerDetails) => {
         let [min, max] = SearchRange(details)
         // bsearch
