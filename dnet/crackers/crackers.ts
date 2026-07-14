@@ -35,6 +35,11 @@ function* shuffleStr(str: string) {
         }
     }
 }
+function SearchRange(details: DarknetServerDetails) {
+    let min = 0,
+        max = Number('9'.repeat(details.passwordLength))
+    return [min, max]
+}
 
 // ========== factory ==========
 function DictAttack(src: string[]) {
@@ -55,11 +60,6 @@ function RegexMatch(re: RegExp, key: keyof DarknetServerDetails, onMatch: (m: Re
         if (!res.success) error(ns, 'regex matched but failed\dMsg:' + JSON.stringify(res), details)
         return pw
     }
-}
-function SearchRange(details: DarknetServerDetails) {
-    let min = 0,
-        max = Number('9'.repeat(details.passwordLength))
-    return [min, max]
 }
 
 const ModelCrackers = {
