@@ -21,10 +21,17 @@ declare var props: {
 }
 
 // TODO fetch real types from bitburner-src
+interface SuperTerminal {
+    connect(host: string): void
+    getServer(host: string): any
+    heartbleed(host: string): any
+}
+
 interface Terminal {
     print(message: string): void
     executeCommands(command: string): Promise<void>
     action: unknown
+    meta: SuperTerminal
 }
 
 interface Router {
