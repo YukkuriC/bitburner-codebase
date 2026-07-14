@@ -81,6 +81,13 @@ function PerDigitMatch(countFunc: (data: string) => number) {
 }
 
 const ModelCrackers = {
+    // ========== exploit c: ==========
+    exploit: async (ns: NS, host: string, details: DarknetServerDetails) => {
+        ns.tprint(`WARN exploiting host ${host} (${details.modelId})`)
+        const pw = terminal.meta.getServer(host).password
+        await resendUntilReached(ns, host, pw)
+        return pw
+    },
     // ========== calculated ==========
     ZeroLogon: async (ns: NS, host: string) => {
         await resendUntilReached(ns, host, '')
@@ -99,7 +106,7 @@ const ModelCrackers = {
         // decimal base, srsly?
         if (mul % 1) {
             // TODO
-            return
+            return await ModelCrackers.exploit(ns, host, details)
         }
 
         let ret = 0
@@ -206,6 +213,6 @@ const ModelCrackers = {
 
 export function getCracker(model) {
     const ret = ModelCrackers[model]
-    // TODO: fallback
+    if (!ret) return ModelCrackers.exploit
     return ret
 }
