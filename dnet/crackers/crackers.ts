@@ -61,9 +61,27 @@ function RegexMatch(re: RegExp, key: keyof DarknetServerDetails, onMatch: (m: Re
         return pw
     }
 }
+function PerDigitMatch(countFunc: (data: string) => number) {
+    return async (ns: NS, host: string, details: DarknetServerDetails) => {
+        const slots = Array(details.passwordLength).fill('_')
+        for (let i = 0; i < slots.length; i++) {
+            for (const digit of R.strAlphaNumeric) {
+                slots[i] = digit
+                const pw = slots.join('')
+                const auth = await resendUntilReached(ns, host, pw)
+                if (auth.success) return pw
+                const bleed = terminal.meta.heartbleed(host)
+                const count = countFunc(bleed.data)
+                // ns.tprint(`test ${pw} count=${count}`)
+                if (count > i) break
+            }
+        }
+        error(ns, 'general brute failed', details)
+    }
+}
 
 const ModelCrackers = {
-    // calculated
+    // ========== calculated ==========
     ZeroLogon: async (ns: NS, host: string) => {
         await resendUntilReached(ns, host, '')
         return ''
@@ -113,7 +131,7 @@ const ModelCrackers = {
         return pw
     },
 
-    // interactive
+    // ========== interactive ==========
     'PHP 5.4': async (ns: NS, host: string, details: DarknetServerDetails) => {
         for (const shuffled of shuffleStr(details.data)) {
             const auth = await resendUntilReached(ns, host, shuffled)
@@ -121,8 +139,17 @@ const ModelCrackers = {
         }
         error(ns, 'shuffle search failed, why?', details)
     },
+    // ========== bleeding interactive ==========
     // no, we need heartbleed here, damn
     // or we have our own bleeding
+    OpenWebAccessPoint: async (ns: NS, host: string, details: DarknetServerDetails) => {
+        await resendUntilReached(ns, host, '')
+        let msg = terminal.meta.heartbleed(host).data
+        msg = msg.slice(msg.indexOf(host) + host.length + 1)
+        const pw = msg.slice(0, msg.indexOf(' '))
+        await resendUntilReached(ns, host, pw)
+        return pw
+    },
     'AccountsManager_4.2': async (ns: NS, host: string, details: DarknetServerDetails) => {
         let [min, max] = SearchRange(details)
         // bsearch
@@ -151,7 +178,6 @@ const ModelCrackers = {
             const bleed = terminal.meta.heartbleed(host)
             const notDivisible = bleed.data == 'false'
             candidates = candidates.filter((c) => !!(c % test) === notDivisible)
-            ns.tprint(`test ${test} ${notDivisible} ${JSON.stringify(auth)} ${candidates.join(',')}`)
         }
         error(ns, 'factor search failed, why?', details)
     },
@@ -173,6 +199,9 @@ const ModelCrackers = {
         }
         error(ns, 'mask test failed, why?', details)
     },
+    // 2-in-1 per-pos matching
+    'RateMyPix.Auth': PerDigitMatch((d) => [...d.matchAll(/🌶️/g)].length),
+    DeepGreen: PerDigitMatch((d) => Number(d.split(',')[0])),
 }
 
 export function getCracker(model) {

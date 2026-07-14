@@ -4,11 +4,13 @@
         "paths": {
             "/*": ["./*"]
         },
+        "target": "es2020",
         "allowJs": true,
         "noEmit": true,
         "module": "ESNext",
         "moduleResolution": "node",
-        "lib": ["ES2017", "DOM"]
+        "lib": ["es2020", "DOM"],
+        "downlevelIteration": true
     },
     "include": ["**/*.js", "**/*.ts", "**/*.d.ts"],
     "exclude": ["node_modules", "old"]
