@@ -5,3 +5,9 @@ export async function resendUntilReached(ns: NS, host: string, pw: string) {
         if (res.code != 408) return res
     }
 }
+export async function reconnectUntilReached(ns: NS, host: string, pw: string) {
+    while (1) {
+        const res = await ns.dnet.connectToSession(host, pw)
+        if (res.code != 408) return res
+    }
+}

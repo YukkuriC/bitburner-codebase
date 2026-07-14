@@ -2,6 +2,7 @@
 import { getCracker } from '../crackers/crackers'
 
 export async function hack(ns: NS, host: string) {
+    ns.dnet.freezeServer
     const details = await ns.dnet.getServerDetails(host)
     if (details.depth < 0) return
 
