@@ -1,5 +1,6 @@
 // including all supported crackers for all types of dnet servers
 // used by hackLib
+import { resendUntilReached } from '../libs/authLib'
 import * as R from './rainbowSheet'
 
 // ========== helpers ==========
@@ -32,12 +33,6 @@ function* shuffleStr(str: string) {
         for (const shuffled of shuffleStr(rest)) {
             yield char + shuffled
         }
-    }
-}
-async function resendUntilReached(ns: NS, host: string, pw: string) {
-    while (1) {
-        const res = await ns.dnet.authenticate(host, pw)
-        if (res.code != 408) return res
     }
 }
 
