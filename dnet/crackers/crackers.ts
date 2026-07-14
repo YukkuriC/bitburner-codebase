@@ -65,7 +65,7 @@ function SearchRange(details: DarknetServerDetails) {
 export const ModelCrackers = {
     // calculated
     ZeroLogon: async (ns: NS, host: string) => {
-        await await resendUntilReached(ns, host, '')
+        await resendUntilReached(ns, host, '')
         return ''
     },
     'DeskMemo_3.1': RegexMatch(/\d+/g, 'passwordHint', (m) => m[0]),
