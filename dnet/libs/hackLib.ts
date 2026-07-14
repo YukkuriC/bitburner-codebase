@@ -1,11 +1,11 @@
 // lib for hacking nodes
-import { ModelCrackers } from '../crackers/crackers'
+import { getCracker } from '../crackers/crackers'
 
 export async function hack(ns: NS, host: string) {
     const details = await ns.dnet.getServerDetails(host)
     if (details.depth < 0) return
 
-    const cracker = ModelCrackers[details.modelId]
+    const cracker = getCracker(details.modelId)
     if (!cracker) {
         ns.tprint(`ERROR: unsupported model: ${details.modelId}\nHost: ${ns.getServer(host).hostname}`)
         // ns.tprint(JSON.stringify(details, undefined, 2))

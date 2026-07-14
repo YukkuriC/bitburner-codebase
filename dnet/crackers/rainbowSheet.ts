@@ -9,3 +9,4 @@ export const romanDigits = {
     D: 500,
     M: 1000,
 }
+export const strAlphaNumeric = '0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM'

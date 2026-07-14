@@ -62,7 +62,7 @@ function SearchRange(details: DarknetServerDetails) {
     return [min, max]
 }
 
-export const ModelCrackers = {
+const ModelCrackers = {
     // calculated
     ZeroLogon: async (ns: NS, host: string) => {
         await resendUntilReached(ns, host, '')
@@ -77,6 +77,13 @@ export const ModelCrackers = {
     OctantVoxel: async (ns: NS, host: string, details: DarknetServerDetails) => {
         const [mulRaw, numRaw] = details.data.split(',')
         const mul = Number(mulRaw)
+
+        // decimal base, srsly?
+        if (mul % 1) {
+            // TODO
+            return
+        }
+
         let ret = 0
         for (const char of Array.from(numRaw)) {
             ret *= mul
@@ -115,7 +122,7 @@ export const ModelCrackers = {
         error(ns, 'shuffle search failed, why?', details)
     },
     // no, we need heartbleed here, damn
-    /*
+    // or we have our own bleeding
     'AccountsManager_4.2': async (ns: NS, host: string, details: DarknetServerDetails) => {
         let [min, max] = SearchRange(details)
         // bsearch
@@ -125,7 +132,8 @@ export const ModelCrackers = {
             if (pw.length < details.passwordLength) pw = '0'.repeat(details.passwordLength - pw.length) + pw
             const auth = await resendUntilReached(ns, host, pw)
             if (auth.success) return pw
-            if (auth.message === 'Higher') min = mid + 1
+            const bleed = terminal.meta.heartbleed(host)
+            if (bleed.data === 'Higher') min = mid + 1
             else max = mid - 1
         }
         error(ns, 'binary search failed, why?', details)
@@ -140,29 +148,35 @@ export const ModelCrackers = {
             let pw = String(test)
             const auth = await resendUntilReached(ns, host, pw)
             if (auth.success) return pw
-            const notDivisible = auth.data == false
-            candidates = candidates.filter((c) => !(c % test > 0) === notDivisible)
-            // no, we need heartbleed here, damn
+            const bleed = terminal.meta.heartbleed(host)
+            const notDivisible = bleed.data == 'false'
+            candidates = candidates.filter((c) => !!(c % test) === notDivisible)
             ns.tprint(`test ${test} ${notDivisible} ${JSON.stringify(auth)} ${candidates.join(',')}`)
         }
         error(ns, 'factor search failed, why?', details)
     },
     NIL: async (ns: NS, host: string, details: DarknetServerDetails) => {
         const locked = Array(details.passwordLength)
-        for (let digit = 0; digit < 10; digit++) {
+        for (const digit of R.strAlphaNumeric) {
             const fill = Array(details.passwordLength).fill(digit)
             for (let i = 0; i < details.passwordLength; i++) {
-                if (typeof locked[i] === 'number') fill[i] = locked[i]
+                if (locked[i] !== undefined) fill[i] = locked[i]
             }
             const pw = fill.join('')
             const auth = await resendUntilReached(ns, host, pw)
             if (auth.success) return pw
-            const mask = auth.data.split(',').map((x) => x === 'yes')
+            const bleed = terminal.meta.heartbleed(host)
+            const mask = bleed.data.split(',').map((x) => x === 'yes')
             for (let i = 0; i < details.passwordLength; i++) {
-                if (mask[i]) locked[i] = digit
+                if (mask[i]) locked[i] = pw[i]
             }
         }
         error(ns, 'mask test failed, why?', details)
     },
-    */
+}
+
+export function getCracker(model) {
+    const ret = ModelCrackers[model]
+    // TODO: fallback
+    return ret
 }
