@@ -40,6 +40,16 @@ function SearchRange(details: DarknetServerDetails) {
         max = Number('9'.repeat(details.passwordLength))
     return [min, max]
 }
+function RomanToNum(roman: string) {
+    let ret = 0
+    for (let i = 0; i < roman.length; i++) {
+        const cur = R.romanDigits[roman[i]] ?? 0
+        const next = R.romanDigits[roman[i + 1]] ?? 0
+        if (cur < next) ret -= cur
+        else ret += cur
+    }
+    return ret
+}
 
 // ========== factory ==========
 function DictAttack(src: string[]) {
@@ -126,14 +136,20 @@ const ModelCrackers = {
     },
     BellaCuore: async (ns: NS, host: string, details: DarknetServerDetails) => {
         const roman = details.data
-        let ret = 0
-        for (let i = 0; i < roman.length; i++) {
-            const cur = R.romanDigits[roman[i]] ?? 0
-            const next = R.romanDigits[roman[i + 1]] ?? 0
-            if (cur < next) ret -= cur
-            else ret += cur
+
+        // between???
+        if (roman.includes(',')) {
+            let [min, max] = roman.split(',').map(RomanToNum)
+            if (min > max) [min, max] = [max, min]
+            for (let i = min; i <= max; i++) {
+                const pw = String(i)
+                const res = await resendUntilReached(ns, host, pw)
+                if (res.success) return pw
+            }
+            error(ns, `brute roman missed; input=${roman}, converted=${min} -> ${max}`)
         }
-        const pw = String(ret)
+
+        const pw = String(RomanToNum(roman))
         await resendUntilReached(ns, host, pw)
         return pw
     },
