@@ -1,6 +1,6 @@
 // copy all dnet scripts to dest
 
-import { reconnectUntilReached } from './libs/authLib'
+import { authArgs } from './libs/authLib'
 
 export function copyAllScripts(ns: NS, dest: string, verbose = false) {
     for (const script of ns.ls(undefined, 'dnet/')) {
@@ -10,8 +10,6 @@ export function copyAllScripts(ns: NS, dest: string, verbose = false) {
 }
 
 export async function main(ns: NS) {
-    const dest = String(ns.args[0] ?? 'darkweb')
-    const pw = ns.args[1]
-    if (typeof pw === 'string') await reconnectUntilReached(ns, dest, pw)
+    const [dest, pw] = await authArgs(ns)
     copyAllScripts(ns, dest)
 }

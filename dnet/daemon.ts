@@ -31,7 +31,7 @@ export async function main(ns: NS) {
                 if (typeof pw !== 'string') continue
                 await reconnectUntilReached(ns, sub, pw)
                 await callWait(ns, 'copier', host, [sub, pw])
-                await callWait(ns, 'postHack', sub)
+                await callWait(ns, 'postHack', host, [sub, pw])
                 await callWait(ns, 'activeMover', host, [sub, pw])
                 fs.unlock(host)
             }

@@ -81,6 +81,7 @@ function PerDigitMatch(countFunc: (data: string) => number) {
                 const auth = await resendUntilReached(ns, host, pw)
                 if (auth.success) return pw
                 const bleed = terminal.meta.heartbleed(host)
+                if (!bleed) return error(ns, 'bleed missed', details)
                 const count = countFunc(bleed.data)
                 // ns.tprint(`test ${pw} count=${count}`)
                 if (count > i) break
@@ -169,6 +170,7 @@ const ModelCrackers = {
     OpenWebAccessPoint: async (ns: NS, host: string, details: DarknetServerDetails) => {
         await resendUntilReached(ns, host, '')
         let msg = terminal.meta.heartbleed(host).data
+        if (!msg) return error(ns, 'bleed missed', details)
         msg = msg.slice(msg.indexOf(host) + host.length + 1)
         const pw = msg.slice(0, msg.indexOf(' '))
         await resendUntilReached(ns, host, pw)
@@ -201,6 +203,7 @@ const ModelCrackers = {
             const auth = await resendUntilReached(ns, host, pw)
             if (auth.success) return pw
             const bleed = terminal.meta.heartbleed(host)
+            if (!bleed) return error(ns, 'bleed missed', details)
             if (bleed.data == 'false') step++
             else {
                 ptr = test
@@ -220,6 +223,7 @@ const ModelCrackers = {
             const auth = await resendUntilReached(ns, host, pw)
             if (auth.success) return pw
             const bleed = terminal.meta.heartbleed(host)
+            if (!bleed) return error(ns, 'bleed missed', details)
             const mask = bleed.data.split(',').map((x) => x === 'yes')
             for (let i = 0; i < details.passwordLength; i++) {
                 if (mask[i]) locked[i] = pw[i]

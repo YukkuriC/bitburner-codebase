@@ -1,12 +1,9 @@
 // make hacked server more likely to move
 
-import { reconnectUntilReached } from './libs/authLib'
-import { call } from './libs/callLib'
+import { authArgs } from './libs/authLib'
 
 export async function main(ns: NS) {
-    const dest = String(ns.args[0] ?? 'darkweb')
-    const pw = ns.args[1]
-    if (typeof pw === 'string') await reconnectUntilReached(ns, dest, pw)
+    const [dest, pw] = await authArgs(ns)
     while (1) {
         const details = ns.dnet.getServerDetails(dest)
         if (!details.isConnectedToCurrentServer) break

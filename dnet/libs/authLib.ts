@@ -11,3 +11,9 @@ export async function reconnectUntilReached(ns: NS, host: string, pw: string) {
         if (res.code != 408) return res
     }
 }
+export async function authArgs(ns: NS) {
+    const dest = String(ns.args[0] ?? 'darkweb')
+    const pw = ns.args[1]
+    if (typeof pw === 'string') await reconnectUntilReached(ns, dest, pw)
+    return [dest, pw] as const
+}

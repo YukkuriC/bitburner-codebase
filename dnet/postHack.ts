@@ -1,14 +1,14 @@
 // prepare server to run after acquired session
 
+import { authArgs } from './libs/authLib'
 import { call } from './libs/callLib'
 
 export async function main(ns: NS) {
-    const host = ns.getHostname()
+    const [dest, pw] = await authArgs(ns)
     while (1) {
-        const details = ns.dnet.getServerDetails(host)
+        const details = ns.dnet.getServerDetails(dest)
         if (details.blockedRam <= 0) break
-        await ns.dnet.memoryReallocation(host)
+        await ns.dnet.memoryReallocation(dest)
     }
-    // await ns.dnet.setStasisLink(true)
-    call(ns, 'daemon', host)
+    call(ns, 'daemon', dest)
 }
