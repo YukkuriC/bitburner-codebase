@@ -18,7 +18,11 @@ export async function main(ns: NS) {
         let reached = probes.length <= 0
         for (const sub of probes) {
             if (sub === 'darkweb') continue
-            if (ns.scriptRunning(ns.getScriptName(), sub)) continue
+            if (ns.scriptRunning(ns.getScriptName(), sub)) {
+                const pw = fs.getPassword(sub)
+                await callWait(ns, 'activeMover', host, [sub, pw])
+                continue
+            }
             if (fs.lock(host, first)) {
                 lockAllCount = 0
                 reached = true

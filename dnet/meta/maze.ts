@@ -43,6 +43,7 @@ export async function main(ns: NS) {
         visited[report.coords] = true
         for (const dir of dirMap) {
             if (!report[dir]) continue
+            if (win) return
             // in
             const auth = await resendUntilReached(ns, target, dir)
             ns.print('goto: ' + dir)
