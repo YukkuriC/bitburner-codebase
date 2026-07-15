@@ -191,18 +191,21 @@ const ModelCrackers = {
         error(ns, 'binary search failed, why?', details)
     },
     'Factori-Os': async (ns: NS, host: string, details: DarknetServerDetails) => {
-        let candidates = Array(SearchRange(details)[1])
-            .fill(0)
-            .map((_, i) => i + 1)
-        // bsearch
-        while (candidates.length > 0) {
-            let test = candidates.shift()
+        const max = SearchRange(details)[1]
+        let ptr = 1,
+            step = 2
+        while (1) {
+            let test = ptr * step
+            if (test > max) break
             let pw = String(test)
             const auth = await resendUntilReached(ns, host, pw)
             if (auth.success) return pw
             const bleed = terminal.meta.heartbleed(host)
-            const notDivisible = bleed.data == 'false'
-            candidates = candidates.filter((c) => !!(c % test) === notDivisible)
+            if (bleed.data == 'false') step++
+            else {
+                ptr = test
+                step = 2
+            }
         }
         error(ns, 'factor search failed, why?', details)
     },
