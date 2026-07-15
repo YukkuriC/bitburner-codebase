@@ -6,7 +6,7 @@ ignored_dirs = [
     os.path.join(base_dir, f)
     for f in [
         'TOOLS',
-        'old',
+        # 'old',
         # oh damn
         'node_modules',
         '.git',
