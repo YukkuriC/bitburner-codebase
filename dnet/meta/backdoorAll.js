@@ -1,3 +1,5 @@
+// backdoor all servers reachable from given darknet server
+// optional arg to lock their positions
 import { bfsCall } from '../../BASE'
 const SuperTerminal = terminal.meta
 

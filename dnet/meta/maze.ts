@@ -1,3 +1,5 @@
+// warp connect to given maze server
+// and DFS crack it from `darkweb`
 import { call, callWait } from '../libs/callLib'
 import { resendUntilReached } from '../libs/authLib'
 const SuperTerminal = terminal.meta
